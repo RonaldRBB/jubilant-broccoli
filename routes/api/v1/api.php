@@ -3,6 +3,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PokemonCardController;
+use App\Http\Controllers\LoginController;
 
 /*
 |--------------------------------------------------------------------------
@@ -15,8 +16,17 @@ use App\Http\Controllers\PokemonCardController;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
-});
+// Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
+//     return $request->user();
+// });
 
-Route::apiResource('pokemon-cards', PokemonCardController::class);
+// Route::apiResource('pokemon-cards', PokemonCardController::class);
+
+
+// user and passport
+Route::prefix('/user')->group(function () {
+    Route::post('/login', [LoginController::class, 'login']);
+});
+Route::middleware('auth:sanctum')->group(function () {
+    Route::apiResource('pokemon-cards', PokemonCardController::class);
+});
