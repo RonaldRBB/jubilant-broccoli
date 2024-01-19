@@ -22,7 +22,7 @@ class PokemonCardController extends Controller
                 $this->applyFilter($query, $filter, $request->input($filter));
             }
         }
-        $result = $query->get();
+        $result = $query->paginate(10);
         return $result;
     }
     /**
