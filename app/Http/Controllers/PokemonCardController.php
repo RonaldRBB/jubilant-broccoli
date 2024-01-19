@@ -13,9 +13,17 @@ class PokemonCardController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        return PokemonCard::all();
+        $filters = (new PokemonCard)->getFillable();
+        $query = PokemonCard::query();
+        foreach ($filters as $filter) {
+            if ($request->has($filter)) {
+                $this->applyFilter($query, $filter, $request->input($filter));
+            }
+        }
+        $result = $query->get();
+        return $result;
     }
     /**
      * Store a newly created resource in storage.

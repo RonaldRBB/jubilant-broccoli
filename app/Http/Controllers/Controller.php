@@ -9,4 +9,22 @@ use Illuminate\Routing\Controller as BaseController;
 class Controller extends BaseController
 {
     use AuthorizesRequests, ValidatesRequests;
+    /**
+     * Aplica filtros
+     * @param Illuminate\Database\Eloquent\Model\query $query
+     * @param string $filter
+     * @param string $value
+     */
+    public function applyFilter($query, $filter, $value)
+    {
+        if (is_array($value)) {
+            $query->where(function ($query) use ($filter, $value) {
+                foreach ($value as $item) {
+                    $query->orWhere($filter, $item);
+                }
+            });
+        } else {
+            $query->where($filter, $value);
+        }
+    }
 }
