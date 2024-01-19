@@ -61,7 +61,7 @@ class PokemonCardController extends Controller
     public function destroy(PokemonCard $pokemonCard)
     {
         $pokemonCard->delete();
-        return response()->json(['message' => 'Carta eliminada correctamente']);
+        return response()->json(['message' => 'Record deleted successfully.']);
     }
     private function validateRequest(Request $request)
     {

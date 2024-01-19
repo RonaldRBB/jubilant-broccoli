@@ -7,6 +7,11 @@ use Illuminate\Support\Facades\Auth;
 
 class LoginController extends Controller
 {
+    /**
+     * Login user y return token
+     * @param  Illuminate\Http\Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function login(request $request)
     {
         $request->validate([
@@ -14,14 +19,12 @@ class LoginController extends Controller
             'password' => 'required',
         ]);
         $credentials = $request->only('email', 'password');
-
         if (!Auth::attempt($credentials)) {
             return response([
                 'message' => 'Not Authorized'
             ], 401);
         }
-        $user = Auth::user();
-        $token =Auth::user()->createToken('auth_token')->plainTextToken;
+        $token = Auth::user()->createToken('auth_token')->plainTextToken;
         return response([
             'access_token' => $token,
             'token_type' => 'Bearer',
