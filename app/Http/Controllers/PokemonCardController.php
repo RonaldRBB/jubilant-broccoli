@@ -10,8 +10,8 @@ class PokemonCardController extends Controller
 {
     /**
      * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
+     * @param  \Illuminate\Http\Request $request
+     * @return \Illuminate\Pagination\LengthAwarePaginator
      */
     public function index(Request $request)
     {
@@ -28,8 +28,8 @@ class PokemonCardController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @param  \Illuminate\Http\Request $request
+     * @return \App\Models\PokemonCard
      */
     public function store(Request $request)
     {
@@ -40,8 +40,8 @@ class PokemonCardController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\PokemonCard  $pokemonCard
-     * @return \Illuminate\Http\Response
+     * @param  \App\Models\PokemonCard $pokemonCard
+     * @return \App\Models\PokemonCard
      */
     public function show(PokemonCard $pokemonCard)
     {
@@ -50,9 +50,9 @@ class PokemonCardController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\PokemonCard  $pokemonCard
-     * @return \Illuminate\Http\Response
+     * @param  \Illuminate\Http\Request $request
+     * @param  \App\Models\PokemonCard $pokemonCard
+     * @return \App\Models\PokemonCard
      */
     public function update(Request $request, PokemonCard $pokemonCard)
     {
@@ -71,6 +71,12 @@ class PokemonCardController extends Controller
         $pokemonCard->delete();
         return response()->json(['message' => 'Record deleted successfully.']);
     }
+    /**
+     * Apply a filter to the query.
+     * 
+     * @param  \Illuminate\Http\Request $request
+     * @return array
+     */
     private function validateRequest(Request $request)
     {
         return $request->validate([
