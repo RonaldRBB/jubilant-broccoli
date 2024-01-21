@@ -4,12 +4,13 @@ namespace App\Http\Controllers;
 
 use App\Models\PokemonCard;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
 
 class PokemonCardController extends Controller
 {
+    private const PAGE_SIZE = 10;
     /**
      * Display a listing of the resource.
+     * 
      * @param  \Illuminate\Http\Request $request
      * @return \Illuminate\Pagination\LengthAwarePaginator
      */
@@ -22,7 +23,7 @@ class PokemonCardController extends Controller
                 $this->applyFilter($query, $filter, $request->input($filter));
             }
         }
-        $result = $query->paginate(10);
+        $result = $query->paginate(self::PAGE_SIZE);
         return $result;
     }
     /**
@@ -33,9 +34,7 @@ class PokemonCardController extends Controller
      */
     public function store(Request $request)
     {
-        Log::info($request->all());
-        $validatedData = $this->validateRequest($request);
-        return PokemonCard::create($validatedData);
+        return PokemonCard::create(PokemonCard::validateRequest($request));
     }
     /**
      * Display the specified resource.
@@ -56,8 +55,7 @@ class PokemonCardController extends Controller
      */
     public function update(Request $request, PokemonCard $pokemonCard)
     {
-        $validatedData = $this->validateRequest($request);
-        $pokemonCard->update($validatedData);
+        $pokemonCard->update(PokemonCard::validateRequest($request));
         return $pokemonCard;
     }
     /**
@@ -70,24 +68,5 @@ class PokemonCardController extends Controller
     {
         $pokemonCard->delete();
         return response()->json(['message' => 'Record deleted successfully.']);
-    }
-    /**
-     * Apply a filter to the query.
-     * 
-     * @param  \Illuminate\Http\Request $request
-     * @return array
-     */
-    private function validateRequest(Request $request)
-    {
-        return $request->validate([
-            'name' => 'required|string|unique:pokemon_cards',
-            'hp' => 'required|numeric|multiple_of:10',
-            'is_first_edition' => 'required|boolean',
-            'expansion' => 'required|string|in:Base Set,Jungle,Fossil,Base Set 2',
-            'type' => 'required|string|in:Agua,Fuego,Hierba,Eléctrico',
-            'rarity' => 'required|string|in:Común,No Común,Rara',
-            'price' => 'required|numeric',
-            'image_url' => 'required|url',
-        ]);
     }
 }

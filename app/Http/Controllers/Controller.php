@@ -14,6 +14,7 @@ class Controller extends BaseController
      * @param Illuminate\Database\Eloquent\Model\query $query
      * @param string $filter
      * @param string $value
+     * @return void
      */
     public function applyFilter($query, $filter, $value)
     {
